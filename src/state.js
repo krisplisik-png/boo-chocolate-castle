@@ -1,0 +1,9 @@
+import {ITEMS,COLORS} from './config.js';
+export const KEY='peakway-boo-v1';
+export function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+export function fresh(card=null){return {version:1,runId:crypto.randomUUID(),scene:'home',mission:0,round:0,orders:[shuffle(ITEMS),shuffle(Object.keys(COLORS)),shuffle([1,2,3,4,5,6,7,8,9,10]).slice(0,5)],earned:[],card,muted:false,reduced:false};}
+export function progress(s,m){return s.earned.filter(k=>k.startsWith(`${m}:`)).length;}
+export function enterMission(s,m){if(!Number.isInteger(m)||m<0||m>2||progress(s,m)===5)return false;s.mission=m;s.round=progress(s,m);s.scene='game';return true;}
+export function valid(s){return s?.version===1&&['home','game','complete','final','card'].includes(s.scene)&&Number.isInteger(s.mission)&&s.mission>=0&&s.mission<3&&Number.isInteger(s.round)&&s.round>=0&&s.round<=5&&Array.isArray(s.orders)&&s.orders.length===3&&s.orders.every((a,i)=>Array.isArray(a)&&a.length===5&&new Set(a).size===5&&a.every(v=>(i===0?ITEMS:i===1?Object.keys(COLORS):[1,2,3,4,5,6,7,8,9,10]).includes(v)))&&Array.isArray(s.earned)&&new Set(s.earned).size===s.earned.length&&progress(s,s.mission)===s.round&&[0,1,2].every(m=>Array.from({length:progress(s,m)},(_,r)=>`${m}:${r}`).every(k=>s.earned.includes(k)))&&s.earned.every(v=>/^[0-2]:[0-4]$/.test(v))&&(s.card===null||/^B1-\d{6,12}$/.test(s.card));}
+export function restore(raw){try{const s=JSON.parse(raw);if(valid(s)){s.runId??=crypto.randomUUID();return s;}return fresh();}catch{return fresh();}}
+export function award(s,value){if(s.scene!=='game'||s.round>=5||s.orders[s.mission][s.round]!==value)return false;const key=`${s.mission}:${s.round}`;if(s.earned.includes(key))return false;s.earned.push(key);s.round++;if(s.round===5){s.scene=s.earned.length===15?'final':'complete';}return true;}
