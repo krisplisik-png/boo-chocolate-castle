@@ -2,7 +2,7 @@ import {ASSETS,ITEMS,COLORS,NUMBERS,MISSIONS,POSITIONS,LINES} from './config.js'
 import {KEY,fresh,restore,shuffle,award,progress,enterMission} from './state.js';
 import {Sound} from './audio.js';
 import {pointBlaster} from './blaster.js';
-import {registerVisit,registerCompletion} from './registration.js';
+import {registerVisit} from './registration.js';
 import {lobbyHTML,finaleHTML,rewardHTML,paintReward} from './screens.js';
 import {pumpkinPosition,movePumpkin} from './pumpkin-race.js';
 const app=document.querySelector('#app'),fx=document.querySelector('#effects'),sound=new Sound();
@@ -117,21 +117,10 @@ function finale(el){
   });
   later(()=>{if(state.scene==='final'&&state.runId===currentRun){state.scene='card';save();render();}},2600);
  };
- const register=async()=>{
-  const retry=document.querySelector('#retry-card');retry.hidden=true;
-  try{
-   if(!state.card){const result=await registerCompletion(state);if(state.runId!==currentRun)return;if(typeof result?.card!=='string'||!/^B1-\d{6,12}$/.test(result.card))throw Error('Invalid reward number');state.card=result.card;visitStats=result;save();}
-   numberReady=true;reveal();
-  }catch{
-   if(state.scene!=='final')return;
-   document.querySelector('.final-status').textContent='Your card number could not be reached. The chest is open; try again to reveal your card.';
-   retry.hidden=false;
-  }
- };
- document.querySelector('#retry-card').onclick=register;
+ if(!state.card){const n=new Uint32Array(1);crypto.getRandomValues(n);state.card=`B1-${String(n[0]%1000000).padStart(6,'0')}`;save();}
+ numberReady=true;
  for(let i=0;i<15;i++)later(()=>sound.tone(),i*140);
  later(()=>{animationDone=true;openChest();reveal();},1800);
- register();
 }
 function card(el){
  el.innerHTML=rewardHTML(state);drawCard();
