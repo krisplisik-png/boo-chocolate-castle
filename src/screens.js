@@ -7,7 +7,7 @@ export function lobbyHTML(state){
 }
 
 export function finaleHTML(){
- return `<div class="finale"><div class="final-title"><span class="eyebrow">15 MAGIC CHOCOLATE COINS</span><h2>Boo’s Magic Chest</h2></div><div class="chest-glow"></div><div class="magic-chest"><div class="chest-aura"></div><canvas id="rising-reward" class="rising-reward" width="1254" height="1254" aria-label="Your numbered reward card"></canvas>${art('chest','chest-piece chest-bottom')}${art('chest','chest-piece chest-lid')}</div><div class="chest-coins">${Array.from({length:15},(_,i)=>`<img src="${ASSETS.coin}" style="--i:${i}" alt="">`).join('')}</div><p class="final-status" role="status">Your magic surprise is almost ready…</p><button class="secondary retry-card" id="retry-card" hidden>Повторить получение номера</button></div>`;
+ return `<div class="finale"><div class="final-title"><span class="eyebrow">15 MAGIC CHOCOLATE COINS</span><h2>Boo’s Magic Chest</h2></div><div class="chest-glow"></div><div class="magic-chest"><div class="chest-aura"></div><canvas id="rising-reward" class="rising-reward" width="1254" height="1254" aria-label="Your numbered reward card"></canvas>${art('chest','chest-piece chest-whole')}</div><div class="chest-coins">${Array.from({length:15},(_,i)=>`<img src="${ASSETS.coin}" style="--i:${i}" alt="">`).join('')}</div><p class="final-status" role="status">Your magic surprise is almost ready…</p><button class="secondary retry-card" id="retry-card" hidden>Повторить получение номера</button></div>`;
 }
 
 export function rewardHTML(state){

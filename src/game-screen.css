@@ -41,6 +41,8 @@ main{position:absolute;inset:0;max-width:none;margin:0;padding:0}
 .final-title{transition:opacity .5s,transform .5s}.opened .final-title{opacity:0;transform:translateY(-12px)}
 .magic-chest{position:absolute;width:min(65vh,58vw);aspect-ratio:1;left:50%;top:57%;transform:translate(-50%,-50%);perspective:800px;isolation:isolate}
 .chest-piece{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 15px 20px #21112a77);pointer-events:none}
+.chest-whole{z-index:6;clip-path:none;transform:none;transition:filter .8s,scale .8s}
+.opened .chest-whole{filter:drop-shadow(0 0 30px #ffda94cc);scale:1.035}
 .chest-bottom{clip-path:polygon(5% 48%,95% 48%,96% 82%,83% 93%,18% 92%,4% 79%);z-index:4}
 .chest-lid{clip-path:polygon(4% 41%,15% 14%,80% 8%,95% 36%,96% 51%,7% 51%);z-index:6;transform-origin:50% 49%;transition:transform 1.7s cubic-bezier(.22,.7,.2,1),filter 1.7s}
 .opened .chest-lid{transform:translateY(-23%) rotateX(58deg) rotate(-7deg);filter:drop-shadow(0 10px 20px #ffda9477)}

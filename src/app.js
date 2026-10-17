@@ -105,20 +105,22 @@ function finale(el){
   chestOpened=true;el.classList.add('opened');
   const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,24);
  };
- const reveal=async()=>{
+ const reveal=()=>{
   if(!animationDone||!numberReady||finishing||state.runId!==currentRun||state.scene!=='final')return;
   finishing=true;
-  try{await paintReward(document.querySelector('#rising-reward'),state.card);}
-  catch{document.querySelector('.final-status').textContent='Your reward number is ready. The card picture could not load.';}
-  if(state.scene!=='final'||state.runId!==currentRun)return;
   openChest();el.classList.add('card-ready');
   sound.say(LINES.finish,'finish');
-  later(()=>{state.scene='card';save();render();},2300);
+  const canvas=document.querySelector('#rising-reward');
+  paintReward(canvas,state.card).catch(()=>{
+   const ctx=canvas?.getContext('2d');
+   if(ctx){ctx.fillStyle='#35134c';ctx.strokeStyle='#ffc34f';ctx.lineWidth=12;ctx.beginPath();ctx.roundRect(70,70,1114,1114,100);ctx.fill();ctx.stroke();ctx.fillStyle='#fff0c6';ctx.textAlign='center';ctx.font='bold 56px Georgia';ctx.fillText('YOUR REWARD CARD',627,460);ctx.fillStyle='#ffd66c';ctx.font='bold 76px Georgia';ctx.fillText(state.card,627,620);}
+  });
+  later(()=>{if(state.scene==='final'&&state.runId===currentRun){state.scene='card';save();render();}},2600);
  };
  const register=async()=>{
   const retry=document.querySelector('#retry-card');retry.hidden=true;
   try{
-   if(!state.card){const result=await registerCompletion(state);if(state.runId!==currentRun)return;state.card=result.card;visitStats=result;save();}
+   if(!state.card){const result=await registerCompletion(state);if(state.runId!==currentRun)return;if(typeof result?.card!=='string'||!/^B1-\\d{6,12}$/.test(result.card))throw Error('Invalid reward number');state.card=result.card;visitStats=result;save();}
    numberReady=true;reveal();
   }catch{
    if(state.scene!=='final')return;
