@@ -120,7 +120,7 @@ function finale(el){
  const register=async()=>{
   const retry=document.querySelector('#retry-card');retry.hidden=true;
   try{
-   if(!state.card){const result=await registerCompletion(state);if(state.runId!==currentRun)return;if(typeof result?.card!=='string'||!/^B1-\\d{6,12}$/.test(result.card))throw Error('Invalid reward number');state.card=result.card;visitStats=result;save();}
+   if(!state.card){const result=await registerCompletion(state);if(state.runId!==currentRun)return;if(typeof result?.card!=='string'||!/^B1-\d{6,12}$/.test(result.card))throw Error('Invalid reward number');state.card=result.card;visitStats=result;save();}
    numberReady=true;reveal();
   }catch{
    if(state.scene!=='final')return;
