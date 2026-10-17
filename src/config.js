@@ -18,5 +18,6 @@ export const LINES={welcome:"Hello, my friend! I'm Boo! Let's find my chocolate 
 Object.assign(ASSETS, { 'home-map':'public/assets/home-map.png', room:'public/assets/room-art.png', courtyard:'public/assets/attic-art.png', garden:'public/assets/garden-art.png', 'mission-1':'public/assets/mission-1.png', 'mission-2':'public/assets/mission-2.png', 'mission-3':'public/assets/mission-3.png' });
 
 
-export const COUNTER_API=''; // Counter uses the same Node server as the game.
+const githubPagesOrigin=globalThis.location?.hostname==='krisplisik-png.github.io'&&globalThis.location.pathname.startsWith('/boo-chocolate-castle/')?'https://boos-chocolate-castle-2026.cozy-coati-7988.chatgpt.site':'';
+export const COUNTER_API=githubPagesOrigin; // GitHub Pages uses the shared public D1 counter.
 Object.assign(ASSETS,{coin:'public/assets/medal-art.png',chest:'public/assets/chest-cutout.png','chest-open':'public/assets/chest-cutout.png','reward-background':'public/assets/reward-art.png'});

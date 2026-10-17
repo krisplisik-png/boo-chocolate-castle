@@ -1,6 +1,6 @@
 # Публикация игры с общей нумерацией
 
-Публичная игра доступна по адресу https://boos-chocolate-castle-2026.cozy-coati-7988.chatgpt.site/ . Серверная версия использует Sites Worker и постоянную D1-базу, чтобы все игроки получали номера из общей очереди. D1 API и миграция сохранены в `hosted-worker/`.
+Публичная игра доступна по адресу https://krisplisik-png.github.io/boo-chocolate-castle/ . Страница GitHub Pages использует Sites Worker и постоянную D1-базу, чтобы все игроки получали номера из общей очереди. Исходники и миграция D1 сохранены в `hosted-worker/`. Также доступна прямая ссылка на серверную версию: https://boos-chocolate-castle-2026.cozy-coati-7988.chatgpt.site/ .
 
 ## На сервере с Docker
 

@@ -38,9 +38,11 @@ npm run dev
 
 **Играть:** https://boos-chocolate-castle-2026.cozy-coati-7988.chatgpt.site/
 
+**GitHub Pages:** https://krisplisik-png.github.io/boo-chocolate-castle/
+
 **GitHub:** https://github.com/krisplisik-png/boo-chocolate-castle
 
-Публичная версия использует общий серверный счётчик и постоянную базу. Исходники приложения и D1 API находятся в `src/`, `server/` и `hosted-worker/`. Подробности публикации — **DEPLOYMENT.md**. GitHub Pages не используется как хостинг игры, поскольку ей нужен сервер для выдачи общего номера.
+Страница GitHub Pages использует общий серверный счётчик и постоянную базу опубликованной версии. Исходники игры и D1 API находятся в `src/`, `server/` и `hosted-worker/`. Каждое изменение в `main` запускает автоматическую публикацию. Подробности — **DEPLOYMENT.md**.
 
 ## Проверки
 
