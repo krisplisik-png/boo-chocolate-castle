@@ -46,7 +46,7 @@ main{position:absolute;inset:0;max-width:none;margin:0;padding:0}
 .opened .chest-lid{transform:translateY(-23%) rotateX(58deg) rotate(-7deg);filter:drop-shadow(0 10px 20px #ffda9477)}
 .chest-aura{position:absolute;inset:20% 10%;border-radius:50%;background:radial-gradient(#fff2a9bb,transparent 65%);opacity:.4;transition:opacity 1s,scale 1s}.opened .chest-aura{opacity:1;scale:1.8}
 .rising-reward{position:absolute;width:38%;height:auto;left:31%;top:42%;border-radius:13%;transform:translateY(30%) scale(.1);opacity:0;z-index:5;transition:transform 1.6s cubic-bezier(.2,.8,.2,1),opacity .4s;box-shadow:0 0 45px #ffe7a2}
-.opened .rising-reward{transform:translateY(-115%) scale(1.7) rotate(-4deg);opacity:1;z-index:7}
+.card-ready .rising-reward{transform:translateY(-115%) scale(1.7) rotate(-4deg);opacity:1;z-index:7}
 .finale .final-status{position:absolute;bottom:35px;left:10%;right:10%;margin:0;font-size:14px;z-index:8;text-align:center;line-height:1.5}.retry-card{position:absolute;bottom:85px;left:50%;transform:translateX(-50%);z-index:10}.chest-coins img{border-radius:50%;z-index:8;animation-name:chestcoin-full}
 @keyframes chestcoin-full{0%{opacity:1;left:85%;top:6%}100%{left:49%;top:56%;transform:scale(.3);opacity:0}}
 .reward-scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:4vw;padding:85px 6vw 20px;text-align:left;background:radial-gradient(ellipse,#492553c9,#291532aa)}

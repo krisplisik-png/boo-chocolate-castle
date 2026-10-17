@@ -94,21 +94,26 @@ function shot(ghost){
 function wrong(b){if(busy)return;errors++;lastAction=performance.now();sound.tone('wrong');sound.say(state.mission===1?LINES.wrongGhost:LINES.wrong,'wrong');if(b){b.classList.remove('wiggle');void b.offsetWidth;b.classList.add('wiggle');}if(errors>=2)document.querySelector(`[data-value="${target()}"]`)?.classList.add('hint');document.querySelector('#instruction').textContent='Try again! '+prompt();}
 function burst(x,y,n=12){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='spark';s.textContent='✦';s.style.cssText=`left:${x}px;top:${y}px;--dx:${Math.cos(i/n*Math.PI*2)*(60+Math.random()*60)}px;--dy:${Math.sin(i/n*Math.PI*2)*(60+Math.random()*60)}px;--spin:${i*63}deg`;fx.append(s);setTimeout(()=>s.remove(),1000);}}
 function flyCoin(b){const r=b.getBoundingClientRect(),c=document.querySelector('#counter').getBoundingClientRect();const coin=document.createElement('img');coin.src=ASSETS.coin;coin.className='flying-coin';coin.style.cssText=`left:${r.left+r.width/2-30}px;top:${r.top+r.height/2-30}px;--dx:${c.left+c.width/2-r.left-r.width/2}px;--dy:${c.top-r.top-r.height/2}px`;fx.append(coin);setTimeout(()=>{coin.remove();sound.tone();},800);burst(r.left+r.width/2,r.top+r.height/2);}
-async function answer(v,b){if(busy)return;sound.unlock();lastAction=performance.now();if(state.mission===1)shot(b);if(v!==target()){wrong(b);return;}busy=true;const finalHit=state.earned.length===14;b.classList.add('correct');if(finalHit)b.classList.add('golden');if(!award(state,v)){busy=false;return;}save();flyCoin(b);document.querySelector('#counter b').textContent=`${state.earned.length} / 15`;document.querySelector('#instruction').textContent='Great job!';sound.tone();await sound.say(finalHit?LINES.fifteen:LINES.good,finalHit?'fifteen':'good');later(()=>{render();if(state.scene!=='final')speakPrompt();},650);}
+function answer(v,b){if(busy)return;sound.unlock();lastAction=performance.now();if(state.mission===1)shot(b);if(v!==target()){wrong(b);return;}busy=true;const finalHit=state.earned.length===14;b.classList.add('correct');if(finalHit)b.classList.add('golden');if(!award(state,v)){busy=false;return;}save();flyCoin(b);document.querySelector('#counter b').textContent=`${state.earned.length} / 15`;document.querySelector('#instruction').textContent='Great job!';sound.tone();sound.say(finalHit?LINES.fifteen:LINES.good,finalHit?'fifteen':'good').catch(()=>{});later(()=>{render();if(state.scene!=='final')speakPrompt();},650);}
 function complete(el){el.innerHTML=`<div class="completion">${img('room','landscape')}<div class="open-door"><div></div></div><div class="completion-content">${img('boo','complete-boo')}<div class="eyebrow">A LITTLE MORE MAGIC, UNLOCKED</div><h2>MISSION ${state.mission+1} COMPLETED!</h2><p>${state.earned.length} / 15 CHOCOLATE COINS!</p><div class="five-coins">${Array.from({length:5},()=>img('coin')).join('')}</div><button class="primary" id="next">NEXT MISSION →</button><button class="secondary" id="choose-mission">CHOOSE MISSION</button></div></div>`;document.querySelector('#next').onclick=()=>{sound.stop();enterMission(state,[0,1,2].find(i=>progress(state,i)<5));save();render();speakPrompt();};document.querySelector('#choose-mission').onclick=goHome;}
 function finale(el){
  el.innerHTML=finaleHTML();
  const currentRun=state.runId;
- let animationDone=false,numberReady=Boolean(state.card),finishing=false;
+ let animationDone=false,numberReady=Boolean(state.card),chestOpened=false,finishing=false;
+ const openChest=()=>{
+  if(!animationDone||chestOpened||state.runId!==currentRun||state.scene!=='final')return;
+  chestOpened=true;el.classList.add('opened');
+  const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,24);
+ };
  const reveal=async()=>{
   if(!animationDone||!numberReady||finishing||state.runId!==currentRun||state.scene!=='final')return;
   finishing=true;
-  await paintReward(document.querySelector('#rising-reward'),state.card);
+  try{await paintReward(document.querySelector('#rising-reward'),state.card);}
+  catch{document.querySelector('.final-status').textContent='Your reward number is ready. The card picture could not load.';}
   if(state.scene!=='final'||state.runId!==currentRun)return;
-  el.classList.add('opened');
-  const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,24);
+  openChest();el.classList.add('card-ready');
   sound.say(LINES.finish,'finish');
-  later(()=>{state.scene='card';save();render();},2600);
+  later(()=>{state.scene='card';save();render();},2300);
  };
  const register=async()=>{
   const retry=document.querySelector('#retry-card');retry.hidden=true;
@@ -117,13 +122,13 @@ function finale(el){
    numberReady=true;reveal();
   }catch{
    if(state.scene!=='final')return;
-   document.querySelector('.final-status').textContent='???????? ????????. ??? ????????? ?????? ????? ??????? ??????. ??????? ????????? ????? ???????????.';
+   document.querySelector('.final-status').textContent='Your card number could not be reached. The chest is open; try again to reveal your card.';
    retry.hidden=false;
   }
  };
  document.querySelector('#retry-card').onclick=register;
  for(let i=0;i<15;i++)later(()=>sound.tone(),i*140);
- later(()=>{animationDone=true;reveal();},2400);
+ later(()=>{animationDone=true;openChest();reveal();},1800);
  register();
 }
 function card(el){
